@@ -9,6 +9,7 @@ RUN echo "@php https://php.codecasts.rocks/v3.7/php-7.2" >> /etc/apk/repositorie
 
 RUN apk update
 
+RUN apk add --update bash
 RUN apk add --update php@php
 RUN apk add --update php-mbstring@php
 RUN apk add --update php-zip@php
