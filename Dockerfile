@@ -30,6 +30,7 @@ RUN apk add --update php-dom@php
 RUN apk add --update git
 RUN apk add --update htop
 RUN apk add --update openssh
+RUN apk add --update php-pdo_pgsql@php
 
 RUN ln -s /usr/bin/php7 /usr/bin/php
 
