@@ -5,11 +5,15 @@ ADD https://php.codecasts.rocks/php-alpine.rsa.pub /etc/apk/keys/php-alpine.rsa.
 
 RUN apk --update add ca-certificates
 
-RUN echo "@php https://php.codecasts.rocks/v3.7/php-7.2" >> /etc/apk/repositories
+RUN echo "@php http://php.codecasts.rocks/v3.7/php-7.2" >> /etc/apk/repositories
+
+# ENV http_proxy http://vpn.putech.ir:3247
+# ENV https_proxy http://vpn.putech.ir:3247
 
 RUN apk update
 
 RUN apk add --update bash
+RUN apk add --update supervisor
 RUN apk add --update php@php
 RUN apk add --update php-mbstring@php
 RUN apk add --update php-zip@php
