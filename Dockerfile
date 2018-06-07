@@ -42,7 +42,7 @@ RUN ln -s /usr/bin/php7 /usr/bin/php
 
 WORKDIR /app
 
-COPY ./composer-setup.sh ./
+COPY ./composer-setup.sh /app/composer-setup.sh
 
 RUN chmod +x /app/composer-setup.sh
 
