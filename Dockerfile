@@ -32,6 +32,7 @@ RUN apk add --update php-zlib@php
 RUN apk add --update php-dom@php
 RUN apk add --update php-pdo_pgsql@php
 RUN apk add --update php-ctype@php
+RUN apk add --update php-gd@php
 RUN apk add --update supervisor
 
 RUN sed -i 's/post_max_size = 8M/post_max_size = 50M/g' /etc/php7/php.ini
