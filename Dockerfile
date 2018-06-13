@@ -49,10 +49,17 @@ RUN mv /composer.phar /bin/composer
 RUN sed -i 's/post_max_size = 8M/post_max_size = 1000M/g' /etc/php7/php.ini
 RUN sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 1000M/g' /etc/php7/php.ini
 RUN sed -i 's|listen = 127.0.0.1:9000|listen = /var/run/php-fpm7.sock|g' /etc/php7/php-fpm.d/www.conf
+RUN sed -i 's/user = nobody/user = www/g' /etc/php7/php-fpm.d/www.conf
+RUN sed -i 's/group = nobody/group = www/g' /etc/php7/php-fpm.d/www.conf
+RUN sed -i 's/listen.mode = 0660/listen.mode = 0666/g' /etc/php7/php-fpm.d/www.conf
 
 ADD ./docker-entrypoint.sh /
 
 RUN chmod +x /docker-entrypoint.sh
+
+RUN adduser -Dh /app www -s /sbin/nologin
+
+RUN mkdir /app/.ssh
 
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
 
