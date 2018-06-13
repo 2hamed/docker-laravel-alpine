@@ -1,7 +1,6 @@
-FROM alpine:3.7
+FROM nginx:1-alpine
 
 ADD https://php.codecasts.rocks/php-alpine.rsa.pub /etc/apk/keys/php-alpine.rsa.pub
-
 
 RUN apk --update add ca-certificates
 
@@ -33,21 +32,28 @@ RUN apk add --update php-dom@php
 RUN apk add --update php-pdo_pgsql@php
 RUN apk add --update php-ctype@php
 RUN apk add --update php-gd@php
-RUN apk add --update supervisor
-
-RUN sed -i 's/post_max_size = 8M/post_max_size = 50M/g' /etc/php7/php.ini
-RUN sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 50M/g' /etc/php7/php.ini
+RUN apk add --update ffmpeg
 
 RUN ln -s /usr/bin/php7 /usr/bin/php
 
-WORKDIR /app
+COPY ./composer-setup.sh /composer-setup.sh
 
-COPY ./composer-setup.sh /app/composer-setup.sh
+RUN chmod +x /composer-setup.sh
 
-RUN chmod +x /app/composer-setup.sh
+RUN /composer-setup.sh
 
-RUN ./composer-setup.sh
+RUN rm /composer-setup.sh
 
-RUN mv /app/composer.phar /bin/composer
+RUN mv /composer.phar /bin/composer
 
-RUN composer global require "laravel/installer"
+RUN sed -i 's/post_max_size = 8M/post_max_size = 1000M/g' /etc/php7/php.ini
+RUN sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 1000M/g' /etc/php7/php.ini
+RUN sed -i 's|listen = 127.0.0.1:9000|listen = /var/run/php-fpm7.sock|g' /etc/php7/php-fpm.d/www.conf
+
+ADD ./docker-entrypoint.sh /
+
+RUN chmod +x /docker-entrypoint.sh
+
+ENTRYPOINT [ "/docker-entrypoint.sh" ]
+
+CMD ["nginx","-g","daemon off;"]
