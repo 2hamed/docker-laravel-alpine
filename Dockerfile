@@ -61,6 +61,8 @@ RUN adduser -Dh /app www -s /sbin/nologin
 
 RUN mkdir /app/.ssh
 
+COPY ./nginx.conf /etc/nginx/nginx.conf
+
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
 
 CMD ["nginx","-g","daemon off;"]
